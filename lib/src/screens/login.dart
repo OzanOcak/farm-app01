@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:farmer/src/styles/textfields.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -17,18 +18,51 @@ class Login extends StatelessWidget {
   }
 
   Widget pageBody(BuildContext context) {
-    return Center(
-      child: (Platform.isAndroid)
-          ? RaisedButton(
-              child: Text('Signup'),
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, '/signup');
-              })
-          : CupertinoButton(
-              child: Text('Signup'),
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, '/signup');
-              }),
+    return ListView(
+      padding: EdgeInsets.all(0.0),
+      children: <Widget>[
+        Container(
+          height: MediaQuery.of(context).size.height * .2,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/top_bg.png'),
+              fit: BoxFit.fill,
+            ),
+          ),
+        ),
+        Container(
+          height: 200.0,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/logo.png'),
+            ),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: TextFielsStyles.textBoxHorizontal(),
+            vertical: TextFielsStyles.textBoxVertical(),
+          ),
+          child: email(),
+        ),
+        password(),
+      ],
     );
+  }
+
+  Widget email() {
+    if (Platform.isAndroid) {
+      return TextField();
+    } else {
+      return CupertinoTextField();
+    }
+  }
+
+  Widget password() {
+    if (Platform.isAndroid) {
+      return TextField();
+    } else {
+      return CupertinoTextField();
+    }
   }
 }
