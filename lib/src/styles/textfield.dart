@@ -3,7 +3,7 @@ import 'text.dart';
 import 'package:flutter/material.dart';
 import 'color.dart';
 
-abstract class TextFieldsStyles {
+abstract class TextFieldStyles {
   static double get textBoxHorizontal => 25.0;
 
   static double get textBoxVertical => 8.0;
@@ -36,7 +36,7 @@ abstract class TextFieldsStyles {
     return InputDecoration(
       contentPadding: EdgeInsets.all(8.0),
       hintText: hintText,
-      hintStyle: TextFieldsStyles.placeholder,
+      hintStyle: TextFieldStyles.placeholder,
       border: InputBorder.none,
       focusedBorder: OutlineInputBorder(
           borderSide:
