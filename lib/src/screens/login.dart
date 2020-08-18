@@ -1,23 +1,34 @@
 import 'dart:io';
-import 'package:farmer/src/styles/textfields.dart';
+import 'package:farmer/src/bloc/auth_bloc.dart';
+import 'package:farmer/src/styles/base.dart';
+import 'package:farmer/src/styles/text.dart';
+import 'package:farmer/src/widgets/button.dart';
+import 'package:farmer/src/widgets/social_button.dart';
+import 'package:farmer/src/widgets/textfield.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+
+import 'package:provider/provider.dart';
 
 class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final authBloc = Provider.of<AuthBloc>(context); //Provider  of bloc
+
     if (Platform.isAndroid) {
       return Scaffold(
-        body: pageBody(context),
+        body: pageBody(context, authBloc), //  injecting bloc in constructor
       );
     } else {
       return CupertinoPageScaffold(
-        child: pageBody(context),
+        child: pageBody(context, authBloc),
       );
     }
   }
 
-  Widget pageBody(BuildContext context) {
+  Widget pageBody(BuildContext context, AuthBloc authBloc) {
+    // get the bloc
     return ListView(
       padding: EdgeInsets.all(0.0),
       children: <Widget>[
@@ -38,14 +49,56 @@ class Login extends StatelessWidget {
             ),
           ),
         ),
+        StreamBuilder<String>(
+            stream: authBloc.email,
+            builder: (context, snapshot) {
+              return AppTextField(
+                isIOS: Platform.isIOS,
+                hintText: 'Email',
+                cupertinoIcon: CupertinoIcons.mail_solid,
+                materialIcon: Icons.email,
+                textInputType: TextInputType.emailAddress,
+                errorText: snapshot.error, // use stream in the bloc
+                onChanged: authBloc.changeEmail, // use stream in the bloc
+              );
+            }),
+        StreamBuilder<String>(
+            stream: authBloc.password,
+            builder: (context, snapshot) {
+              return AppTextField(
+                isIOS: Platform.isIOS,
+                hintText: 'Password',
+                cupertinoIcon: IconData(0xf4c9,
+                    fontFamily: CupertinoIcons.iconFont,
+                    fontPackage: CupertinoIcons.iconFontPackage),
+                materialIcon: Icons.lock,
+                obscureText: true,
+                errorText: snapshot.error,
+                onChanged: authBloc.changePassword,
+              );
+            }),
+        AppButton(buttonText: 'Login', buttonType: ButtonType.LightBlue),
+        Center(child: Text('Or', style: TextStyles.suggestion)),
         Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: TextFielsStyles.textBoxHorizontal(),
-            vertical: TextFielsStyles.textBoxVertical(),
+          padding: BaseStyles.listPadding,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              AppSocialButton(socialType: SocialType.Facebook),
+              AppSocialButton(socialType: SocialType.Google),
+            ],
           ),
-          child: email(),
         ),
-        password(),
+        RichText(
+          textAlign: TextAlign.center,
+          text: TextSpan(text: 'New Here?', style: TextStyles.body, children: [
+            TextSpan(
+                text: 'Signup',
+                style: TextStyles.link,
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () => Navigator.pushNamed(context, '/signup'))
+          ]),
+        )
       ],
     );
   }

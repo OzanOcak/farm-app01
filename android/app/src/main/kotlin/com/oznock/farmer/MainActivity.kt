@@ -1,4 +1,4 @@
-package com.example.farmer
+package com.oznock.farmer
 
 import io.flutter.embedding.android.FlutterActivity
 
