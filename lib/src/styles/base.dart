@@ -6,6 +6,8 @@ abstract class BaseStyles {
 
   static double get borderWidth => 2.0;
 
+  static double get animationOffset => 2.0;
+
   static double get listFieldHorizontal => 25.0;
 
   static double get listFieldVertical => 8.0;

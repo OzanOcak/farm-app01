@@ -77,7 +77,15 @@ class Login extends StatelessWidget {
                 onChanged: authBloc.changePassword,
               );
             }),
-        AppButton(buttonText: 'Login', buttonType: ButtonType.LightBlue),
+        StreamBuilder<bool>(
+            stream: authBloc.isValid,
+            builder: (context, snapshot) {
+              return AppButton(
+                  buttonText: 'Login',
+                  buttonType: (snapshot.data == true)
+                      ? ButtonType.LightBlue
+                      : ButtonType.Disabled);
+            }),
         Center(child: Text('Or', style: TextStyles.suggestion)),
         Padding(
           padding: BaseStyles.listPadding,
