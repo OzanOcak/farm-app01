@@ -11,7 +11,23 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-class SignUp extends StatelessWidget {
+class SignUp extends StatefulWidget {
+  //conver stf to use initState
+
+  @override
+  _SignUpState createState() => _SignUpState();
+}
+
+class _SignUpState extends State<SignUp> {
+  @override
+  void initState() {
+    final authBloc = Provider.of<AuthBloc>(context, listen: false);
+    authBloc.user.listen((user) {
+      if (user != null) Navigator.pushReplacementNamed(context, '/landing');
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final authBloc = Provider.of<AuthBloc>(context); //Provider  of bloc
@@ -81,10 +97,12 @@ class SignUp extends StatelessWidget {
             stream: authBloc.isValid,
             builder: (context, snapshot) {
               return AppButton(
-                  buttonText: 'Signup',
-                  buttonType: (snapshot.data == true)
-                      ? ButtonType.LightBlue
-                      : ButtonType.Disabled);
+                buttonText: 'Signup',
+                buttonType: (snapshot.data == true)
+                    ? ButtonType.LightBlue
+                    : ButtonType.Disabled,
+                onPressed: authBloc.signupEmail,
+              );
             }),
         Center(child: Text('Or', style: TextStyles.suggestion)),
         Padding(
